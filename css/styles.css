@@ -1,0 +1,21 @@
+body {
+    padding: 0
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.artists {
+    align-items: flex-start;
+}
+
+.artistList {
+    padding-inline-start: 10px;
+}
+
+.artistListItem {
+    background-color: red;
+    list-style-type: none;
+}

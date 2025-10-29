@@ -1,0 +1,1 @@
+artistInput = document.querySelector('#search')
