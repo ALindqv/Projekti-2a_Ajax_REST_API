@@ -1,15 +1,44 @@
+:root {
+    --albumCoverDimensions: 165px;
+}
+
 body {
     padding: 0
 }
 
-.container {
+.app {
+    display: flex;
+    flex-direction: row;
+}
+
+.search {
     display: flex;
     flex-direction: row;
 }
 
 .artists {
-    align-items: flex-start;
+    align-self: flex-start;
+    padding-right: 5px;
 }
+
+.information {
+    display: flex;
+    flex-direction: column;
+    
+    align-self: flex-end;
+}
+
+.albumCover {
+    max-width: var(--albumCoverDimensions);
+    max-height: var(--albumCoverDimensions);
+    border: 1px;
+    border-radius: 3px;
+}
+
+.albumTitle {
+    align-self: center;
+}
+
 
 .artistList {
     padding-inline-start: 10px;
