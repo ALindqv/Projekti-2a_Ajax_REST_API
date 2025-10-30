@@ -1,5 +1,5 @@
 :root {
-    --albumCoverDimensions: 165px;
+    --albumCoverDimensions: 170px;
 }
 
 body {
@@ -24,7 +24,6 @@ body {
 .information {
     display: flex;
     flex-direction: column;
-    
     align-self: flex-end;
 }
 
@@ -35,11 +34,6 @@ body {
     border-radius: 3px;
 }
 
-.albumTitle {
-    align-self: center;
-}
-
-
 .artistList {
     padding-inline-start: 10px;
 }
@@ -47,4 +41,12 @@ body {
 .artistListItem {
     background-color: red;
     list-style-type: none;
+}
+
+th {
+    text-align: start;
+}
+
+td {
+    text-align: center;
 }
