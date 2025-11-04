@@ -1,5 +1,7 @@
 :root {
-    --albumCoverDimensions: 170px;
+    --albumCoverDimensions: 300px;
+    --albumCoverScaling: auto;
+    --tableTextAlign: start;
 }
 
 body {
@@ -25,9 +27,25 @@ body {
     display: flex;
     flex-direction: column;
     align-self: flex-end;
+    align-items: center;
+}
+
+.artistInformation:empty {
+    display: none;
+}
+
+.albumInformation {
+    padding: 10px;
+    background-color: beige;
+}
+
+.albumInformation:empty {
+    display: none;
 }
 
 .albumCover {
+    height: var(--albumCoverScaling);
+    width: var(--albumCoverScaling);
     max-width: var(--albumCoverDimensions);
     max-height: var(--albumCoverDimensions);
     border: 1px;
@@ -35,18 +53,27 @@ body {
 }
 
 .artistList {
-    padding-inline-start: 10px;
+    padding-inline-start: 0px;
 }
 
 .artistListItem {
-    background-color: red;
+    background-color: rgb(151, 72, 72);
     list-style-type: none;
 }
 
+table {
+    margin-right: auto;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
 th {
-    text-align: start;
+    padding-right: 40px;
+    text-align: var(--tableTextAlign);
 }
 
 td {
-    text-align: center;
+    text-align: var(--tableTextAlign);
 }
