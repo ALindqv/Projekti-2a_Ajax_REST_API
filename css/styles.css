@@ -25,13 +25,39 @@ body {
 
 .information {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-self: flex-end;
     align-items: center;
 }
 
+.artistInformation {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+}
+
 .artistInformation:empty {
     display: none;
+}
+
+.artistName {
+    padding: 0;
+    
+}
+
+#artistBio {
+    resize: none;
+    border: 1px;
+    border-radius: 5px;
+    
+}
+
+#artistBio::-webkit-scrollbar {
+    display: none;
+}
+
+#artistBio.focus {
+    outline-width: 0;
 }
 
 .albumInformation {
@@ -44,36 +70,62 @@ body {
 }
 
 .albumCover {
+    margin-left: auto;
+    margin-right: auto;
     height: var(--albumCoverScaling);
     width: var(--albumCoverScaling);
     max-width: var(--albumCoverDimensions);
     max-height: var(--albumCoverDimensions);
     border: 1px;
-    border-radius: 3px;
+    border-radius: 2px;
+}
+
+.tracklistHeading {
+    width: 10ch;
 }
 
 .artistList {
     padding-inline-start: 0px;
 }
 
-.artistListItem {
+.artistList li {
     background-color: rgb(151, 72, 72);
     list-style-type: none;
 }
 
-table {
-    margin-right: auto;
+.albumList {
+    padding-inline-start: 0px;
+}
+
+.albumList li {
+    list-style-type: none;
+}
+
+.trackList {
+    width: fit-content;
+}
+
+.numCol {
+    width: 3ch;
+}
+
+.titleCol {
+    width: auto;
+}
+
+.durationCol {
+    width: 7ch;
+}
+
+.tracklistTbl {
+    table-layout: fixed;
+}
+
+.tracklistTbl th, .tracklistTbl td {
+    text-align: left;
 }
 
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-th {
-    padding-right: 40px;
-    text-align: var(--tableTextAlign);
-}
-
-td {
-    text-align: var(--tableTextAlign);
-}
