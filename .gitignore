@@ -3,3 +3,4 @@
 .env.*.local
 
 test_data/
+index_copy.html

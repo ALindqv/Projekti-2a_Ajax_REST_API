@@ -1,5 +1,5 @@
 
-const API_KEY = 'bb51fa0ffebc55afdcefee097c3019a6'
+const API_KEY = ''
 
 const artist = 'Mortiferum'
 const album = 'Preserved in Torment'
