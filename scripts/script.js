@@ -1,5 +1,17 @@
+/**
+ * Code sections
+ * 1. Global variables
+ * 2. Api requests
+ * 3. Handling data
+ * 4. Content for artist div
+ * 5. Content for album div
+ * 6. Event listeners
+ */
 
-const API_KEY = ''
+
+//#region 1. Global variables
+
+const API_KEY = 'bb51fa0ffebc55afdcefee097c3019a6'
 
 const artist = 'Mortiferum'
 const album = 'Preserved in Torment'
@@ -23,6 +35,10 @@ const searchBtn = document.querySelector('.searchButton');
 const artistList = document.querySelector('.artistList')
 const artistButtons = document.querySelectorAll('.artistChoice');
 const albumButtons = document.querySelectorAll('.albumEntry');
+
+//#endregion
+
+//#region 2. Api requests
 
 const getArtistAlbums = (artist) => {
     API_REQUEST = `https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${encodeURIComponent(artist)}&api_key=${API_KEY}&format=json`
@@ -75,6 +91,20 @@ const getAlbumInfo = (artist, album) => {
         })
 }
 
+//#endregion
+
+//#region 3. Handling data
+
+//Normalising track data into array to handle single track albums correctly
+const normaliseTracks = (tracks) => {
+    if (Array.isArray(tracks)) {
+        return tracks;
+    } else if (tracks == null) {
+        return [];
+    } else {
+        return [tracks]
+    }
+}
 
 //API data for track duration is in seconds, format to look better 
 const durationFormat = (duration) => {
@@ -89,8 +119,10 @@ const durationFormat = (duration) => {
     : `${mins}:${String(secs).padStart(2, '0')}` || 'N/A'
 }
 
+//#endregion
 
-//Create content for artist information div
+//#region 4. Content for artist div
+
 const createAlbumList = (data) => {
     const albums = data.topalbums
     const albumListFrag = document.createDocumentFragment();
@@ -108,9 +140,7 @@ const createAlbumList = (data) => {
     document.addEventListener('click', (e) => {
     const li = e.target.closest('.albumList > li');
         getAlbumInfo(data.topalbums.album[0].artist.name, li.textContent.trim())
-}) 
-
-
+    }) 
 }
 
 //Render artist information div content
@@ -150,20 +180,32 @@ const albumInfo = (title, value) => {
     return row
 }
 
-const createSonglist = (data) => {
-    const tracks = data.album.tracks
+//#endregion
+
+//#region 5. Content for album div
+
+const createTracklist = (data) => {
+    const tracks = data?.album?.tracks?.track;
+    const tracklist = normaliseTracks(tracks)
+
+    if (tracklist.length === 0) {
+        const noTracks = document.createElement('p');
+            noTracks.textContent = 'Tracks not available';
+            albumDiv.appendChild(noTracks);
+            return;
+    }
+
     const tbl = document.createElement('table')
     tbl.classList.add('tracklistTbl')
 
-    //Create colgroup and col elements for the table for styling
+    //colgroup and col elements for the table for styling
     const colGr = document.createElement('colgroup');
     const colClasses = ['numCol', 'titleCol', 'durationCol']
     colClasses.forEach(className => {
         const colElem = document.createElement('col');
         colElem.classList.add(className);
         colGr.appendChild(colElem)
-    })
-    tbl.appendChild(colGr)
+    }); tbl.appendChild(colGr)
 
     const tHead = tbl.createTHead();
     const tBody = tbl.createTBody();
@@ -178,14 +220,14 @@ const createSonglist = (data) => {
         songListHead.textContent = label;
         songListHead.classList.add(`track${label}`);
       songListFrag.appendChild(songListHead);
-    })
-    slHeadRow.append(songListFrag)
+    }); slHeadRow.append(songListFrag)
     
     //Looping tracks info into the table
-    tracks.track.forEach(track => {
-      formatted = durationFormat(track.duration)
+    
+    tracklist.forEach(track => { 
+      const formattedDuration = durationFormat(track.duration)
       const trackInfo = tBody.insertRow();
-      [track['@attr']?.rank, track.name, formatted].forEach(value => {
+      [track['@attr'].rank, track.name, formattedDuration].forEach(value => {
         const trackData = trackInfo.insertCell();
         trackData.textContent = value;
       })
@@ -199,11 +241,9 @@ const createSonglist = (data) => {
         slFooterHead.textContent = 'Total runtime'
     songListFooter.appendChild(slFooterHead)
     
-    //Calculate total album runtime from duration array
-    let total = 0;
-    tracks.track.forEach(track => {
-      total += track.duration;
-    })
+    //Calculate total album runtime from duration array, starting sum at 0
+    let total = tracklist.reduce((sum, track) => sum + Number(track.duration || 0), 0)
+
 
     // Display runtime in the footer
     const formattedRuntime = document.createElement('td')
@@ -215,8 +255,6 @@ const createSonglist = (data) => {
     trackDiv.appendChild(tbl)
     albumDiv.appendChild(trackDiv);
 }
-
-
 
 const renderAlbum = (data) => {
   albumDiv.innerHTML = ''
@@ -242,10 +280,12 @@ const renderAlbum = (data) => {
   
 
   albumDiv.append(albumCover, albumInfoTbl, albumInfoHeading)
-  createSonglist(data)
+  createTracklist(data)
 }
 
+//#endregion
 
+//#region 6. Event Listeners
 
 //searchBtn.addEventListener('click', createAlbumList);
 artistList.addEventListener('click', (e) => {
@@ -256,12 +296,11 @@ artistList.addEventListener('click', (e) => {
         
 })
 
-
-
-
 artistSearchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const artistValue = artistInput.value.trim(); 
   
   getArtistAlbums(artistValue)
 })
+
+//#endregion
