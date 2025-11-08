@@ -5,6 +5,7 @@
 }
 
 body {
+    scrollbar-width: thin;
     padding: 0
 }
 
@@ -27,7 +28,6 @@ body {
     display: flex;
     flex-direction: row;
     align-self: flex-end;
-    align-items: center;
 }
 
 .artistInformation {
@@ -89,8 +89,12 @@ body {
 }
 
 .artistList li {
+    margin-bottom: 2px;
+    padding: 3px;
     background-color: rgb(151, 72, 72);
     list-style-type: none;
+    cursor: pointer;
+    
 }
 
 .albumList {
@@ -99,6 +103,7 @@ body {
 
 .albumList li {
     list-style-type: none;
+    cursor: pointer;
 }
 
 .trackList {
