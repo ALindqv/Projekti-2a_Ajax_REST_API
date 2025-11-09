@@ -13,7 +13,7 @@
 
 const API_KEY = ''
 
-const artist = 'Mortiferum'
+const artist = 'Demilich'
 const album = 'Preserved in Torment'
 
 /*
@@ -27,6 +27,7 @@ API_REQUEST.searchParams.set('format', 'json') */
 const artistDiv = document.querySelector('.artistInformation');
 const albumDiv = document.querySelector('.albumInformation');
 const trackLstDiv = document.querySelector('.trackList');
+const albumLstPlaceholder = document.querySelector('#albumDivInit')
 
 const artistInput = document.querySelector('.searchInput');
 const artistSearchForm = document.querySelector('.artistSearch');
@@ -58,20 +59,13 @@ const getArtistAlbums = (artist) => {
 }
 
 const getArtistInfo = (artist) => {
-    const API_REQUEST = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artist}&api_key=${API_KEY}&format=json`
-    fetch(API_REQUEST)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Virhe')
-          } 
-          return response.json();
-        })
-        .then(data => {
-          renderInfo(data);
-        })
-        .catch(error => {
-          console.error('Virhe', error)
-        })
+    const API_REQUEST = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artist)}&api_key=${API_KEY}&format=json`
+    return fetch(API_REQUEST)
+        .then((response) => 
+          {return response.json().then((data) => {
+          console.log(data);
+          return data;
+        })})
 } 
 
 const getAlbumInfo = (artist, album) => {
@@ -130,17 +124,26 @@ const createAlbumList = (data) => {
         albumUl.classList.add('albumList')
     
     albums.album.forEach(album => {
-        const albumLi = document.createElement('li')
-            albumLi.textContent = album.name
-            albumUl.appendChild(albumLi) 
+        const albumLi = Object.assign(document.createElement('li'), {
+            textContent: album.name
+        })
+        albumUl.appendChild(albumLi)
+    })
+    albumUl.addEventListener('click', (e) => {
+    const li = e.target.closest('.albumList > li');
+        if (!li || !albumUl.contains(li)) return; //Ignore clicks outside intended elements
+        getAlbumInfo(artist, li.textContent.trim())
     })
     albumListFrag.append(albumUl)
     artistDiv.append(albumListFrag)
-    
-    document.addEventListener('click', (e) => {
-    const li = e.target.closest('.albumList > li');
-        getAlbumInfo(data.topalbums.album[0].artist.name, li.textContent.trim())
-    }) 
+}
+
+const getActivity = () => {
+  let jsonData;
+  getArtistInfo('Wormrot').then((data) => {
+    jsonData = data
+    console.log(jsonData)
+  })
 }
 
 //Render artist information div content
@@ -151,12 +154,12 @@ const renderArtist = (data) => {
         artistHead.classList.add('artistName');
         artistHead.textContent = data.topalbums.album[0].artist.name
 
-    const artistBio = document.createElement('textarea');
-        artistBio.id = 'artistBio'
-        artistBio.textContent = 'Artist description goes here'
-        artistBio.readOnly = 'true'
-        artistBio.rows = '20'
-        artistBio.cols = '35'
+    const artistBio = Object.assign(document.createElement('textarea'), {
+        id: 'artistBio',
+        textContent: 'Artist description',
+        readOnly: 'true',
+    });
+        
 
     const albumListHead = document.createElement('h2')
         albumListHead.classList.add('albumListHeading')
@@ -165,6 +168,10 @@ const renderArtist = (data) => {
     artistDiv.append(artistHead, artistBio, albumListHead)
     createAlbumList(data)
 }
+
+//#endregion
+
+//#region 5. Content for album div
 
 // Create content for album div
 const albumInfo = (title, value) => {
@@ -180,9 +187,6 @@ const albumInfo = (title, value) => {
     return row
 }
 
-//#endregion
-
-//#region 5. Content for album div
 
 const createTracklist = (data) => {
     const tracks = data?.album?.tracks?.track;
@@ -246,30 +250,30 @@ const createTracklist = (data) => {
 
 
     // Display runtime in the footer
-    const formattedRuntime = document.createElement('td')
-    formattedRuntime.textContent = durationFormat(total)
-    songListFooter.appendChild(formattedRuntime)
+    const formattedRuntime = document.createElement('td');
+    formattedRuntime.textContent = durationFormat(total);
+    songListFooter.appendChild(formattedRuntime);
 
-    trackDiv = document.createElement('div')
-    trackDiv.classList.add('trackList')
-    trackDiv.appendChild(tbl)
-    albumDiv.appendChild(trackDiv);
+    
+    albumDiv.appendChild(tbl);
 }
 
 const renderAlbum = (data) => {
-  albumDiv.innerHTML = ''
-  
-  const albumCover = document.createElement('img')
-    albumCover.classList.add('albumCover')
-    albumCover.src = data.album.image[3]['#text']
+  albumDiv.innerHTML = '';
   
   // Album information
-  const albumInfoTbl = document.createElement('table');
-    albumInfoTbl.classList.add('albumInfoTbl');
+    const albumInfoTbl = document.createElement('table');
+        albumInfoTbl.classList.add('albumInfoTbl');
+  
+    const albumCover = document.createElement('img');
+        albumCover.classList.add('albumCover');
+        albumCover.src = data.album.image[3]['#text'];
+  
+  
   
   const albumInfoHeading = document.createElement('h2')
-    albumInfoHeading.classList.add('tracklistHeading')
-    albumInfoHeading.textContent = 'Tracklist'
+    albumInfoHeading.classList.add('tracklistHeading');
+    albumInfoHeading.textContent = 'Tracklist';
 
   //Populate info table with API data
   albumInfoTbl.append(
@@ -287,14 +291,17 @@ const renderAlbum = (data) => {
 
 //#region 6. Event Listeners
 
-//searchBtn.addEventListener('click', createAlbumList);
+//Event listener for li elements using event delegation
 artistList.addEventListener('click', (e) => {
     const li = e.target.closest('li');
-        albumDiv.innerHTML = '';
-        artistDiv.innerHTML = '';
+        albumDiv.textContent = '';
+        artistDiv.textContent = '';
+        if (!li || !artistList.contains(li)) return; // Ignore clicks outside the li elements
         getArtistAlbums(li.textContent.trim())
-        
+        //getActivity()
 })
+
+
 
 artistSearchForm.addEventListener('submit', (e) => {
   e.preventDefault();
