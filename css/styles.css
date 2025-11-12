@@ -8,7 +8,6 @@
 }
 
 body {
-    scrollbar-width: thin;
     padding: 0
 }
 
@@ -18,8 +17,26 @@ body {
 }
 
 .search {
+    padding: 0px;
+}
+.artistSearch {
     display: flex;
-    flex-direction: row;
+    align-items: stretch;
+}
+
+.searchInput {
+    background-color: rgb(203, 203, 203);
+    border: none;
+    border-radius: 10px 0px 0px 10px;
+    min-height: 2em;
+    padding-left: 10px;
+}
+
+.searchBtn {
+    border: none;
+    border-radius: 0px 5px 5px 0px;
+    background-color: cyan;
+    min-height: 20px;
 }
 
 .artists {
@@ -27,49 +44,47 @@ body {
     padding-right: 5px;
 }
 
-.artistSearch {
-    display: flex;
-    align-items: center;
-}
+
 
 .information {
     display: flex;
     justify-content: space-between;
     align-self: flex-end;
-    max-height: 90vh;
+    max-height: 96vh;
 }
 
 .artistInformation {
     display: flex;
     flex-direction: column;
     align-self: flex-start;
+    min-width: 20vw;
+    max-width: 30vw;
     max-height: inherit;
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: auto;
+    overflow: auto;
 }
 
 .artistInformation:empty {
     display: none;
 }
 
-.artistName {
-    padding: 0;
-    
-}
-
 #artistBio {
-    width: 60ch;
+    padding: 5px;
+    min-height: 10lh;
+    
     height: 12lh;
+    min-width: var(--artistInfoMinWidth);
+    max-height: 40%;
     box-sizing: border-box;
-    resize: vertical;
-    max-height: 50vh;
-    border: 1px;
+    overflow: auto;
     background-color: rgb(223, 223, 223);
 }
 
 .albumInformation {
-    background-color: beige;
+    display: flex;
+    flex-direction: column;
     min-height: 0;
     height: fit-content;
     max-height: inherit;
@@ -84,17 +99,39 @@ body {
 }
 
 .albumCover {
+    align-self: center;
     height: var(--albumCoverScaling);
     width: var(--albumCoverScaling);
-    max-width: 100%;
+    max-width: 300px;
     max-height: var(--albumCoverDimensions);
     border: 1px;
     border-radius: 1px;
+    margin-top: 5px;
 }
 
 .albumInfoTbl {
+    align-self: center;
     text-align: var(--tblTextAlign);
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 2ch 5px; 
+    table-layout: auto;
+}
+.albumInfoTbl tr {
+    margin-top: 3px;
+    overflow: hidden;
+    border: solid;
+    border-width: 0px 1px 0px 1px;
+    border-radius: 5px;
+}
+
+.albumInfoTbl th {
+    font-weight: 600;
+    white-space: nowrap;
+    color: #0f172a;
+}
+
+.albumInfoTbl td {
+    color: #334155;
 }
 
 .tracklistHeading {
@@ -120,11 +157,13 @@ body {
 }
 
 .albumList {
+    max-width: 50vw;
     padding-inline-start: 0px;
     overflow-y: auto;
 }
 
 .albumList li {
+    min-width: 15ch;
     margin-bottom: var(--liMarginB);
     padding: var(--liPadding);
     background-color: rgb(188, 188, 188);
@@ -151,6 +190,7 @@ body {
 }
 
 .tracklistTbl {
+    min-width: 300px;
     table-layout: fixed;
     border-collapse: collapse;
     overflow-y: auto;
@@ -179,6 +219,17 @@ body {
     background-color: red;
 }
 
-tr:nth-child(even) {
+.tracklistTbl tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+
+@media only screen and (max-width: 600px) {
+    .app {
+        display: flex;
+        flex-direction: column;
+    }
+    .information {
+        display: flex;
+        flex-direction: column;
+    }
 }

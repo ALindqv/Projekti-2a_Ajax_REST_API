@@ -10,20 +10,6 @@
 
 
 //#region 1. Global variables
-
-const API_KEY = ''
-
-const artist = 'Demilich'
-const album = 'Preserved in Torment'
-
-/*
-const API_REQUEST = new URL('http://ws.audioscrobbler.com/2.0/');
-API_REQUEST.searchParams.set('method', 'album.getinfo');
-API_REQUEST.searchParams.set('api_key', API_KEY);
-API_REQUEST.searchParams.set('artist', artist);
-API_REQUEST.searchParams.set('album', album)
-API_REQUEST.searchParams.set('format', 'json') */
-
 const artistDiv = document.querySelector('.artistInformation');
 const albumDiv = document.querySelector('.albumInformation');
 const trackLstDiv = document.querySelector('.trackList');
@@ -34,16 +20,15 @@ const artistSearchForm = document.querySelector('.artistSearch');
 const searchBtn = document.querySelector('.searchButton');
 
 const artistList = document.querySelector('.artistList')
-const artistButtons = document.querySelectorAll('.artistChoice');
-const albumButtons = document.querySelectorAll('.albumEntry');
 
 //#endregion
 
 //#region 2. Api requests
 
+/*
 const getArtistAlbums = (artist) => {
     API_REQUEST = `https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${encodeURIComponent(artist)}&api_key=${API_KEY}&format=json`
-    fetch(API_REQUEST)
+    return fetch(API_REQUEST)
         .then(response => {
           if (!response.ok) {
             throw new Error('Virhe')
@@ -51,7 +36,7 @@ const getArtistAlbums = (artist) => {
           return response.json();
         })
         .then(data => {
-            renderArtist(data);
+            return data;
         })
         .catch(error => {
             console.error('Virhe', error)
@@ -61,9 +46,8 @@ const getArtistAlbums = (artist) => {
 const getArtistInfo = (artist) => {
     const API_REQUEST = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artist)}&api_key=${API_KEY}&format=json`
     return fetch(API_REQUEST)
-        .then((response) => 
-          {return response.json().then((data) => {
-          console.log(data);
+        .then((response) => {
+          return response.json().then((data) => {
           return data;
         })})
 } 
@@ -83,20 +67,39 @@ const getAlbumInfo = (artist, album) => {
         .catch(error => {
           console.error('Virhe', error)
         })
+}*/
+
+const getArtistInfo = async artist => {
+  const res = await fetch(`/api?action=artistInfo&artist=${encodeURIComponent(artist)}`);
+  if (!res.ok) throw new Error(`Artist info request error: ${res.status}`);
+  return res.json();
 }
+
+const getArtistAlbums = async artist => {
+  const res = await fetch(`/api?action=artistAlbums&artist=${encodeURIComponent(artist)}`)
+  if (!res.ok) throw new Error(`Albums request error: ${res.status}`);
+  return res.json();
+}
+
+const getAlbumInfo = async (artist, album) => {
+  const res = await fetch(`/api?action=albumInfo&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}`)
+  if (!res.ok) throw new Error(`Album info request error: ${res.status}`) 
+  return res.json();
+}
+
 
 //#endregion
 
 //#region 3. Handling data
 
-//Normalising track data into array to handle single track albums correctly
+//Handling single track or missing tracks albums
 const normaliseTracks = (tracks) => {
     if (Array.isArray(tracks)) {
         return tracks;
     } else if (tracks == null) {
         return [];
     } else {
-        return [tracks]
+        return [tracks];
     }
 }
 
@@ -110,15 +113,17 @@ const durationFormat = (duration) => {
     //formatting seconds display to either h:mm:ss or m:ss
     return hours > 0  
     ? `${hours}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}` 
-    : `${mins}:${String(secs).padStart(2, '0')}` || 'N/A'
+    : `${mins}:${String(secs).padStart(2, '0')}`
 }
 
 //#endregion
 
 //#region 4. Content for artist div
 
-const createAlbumList = (data) => {
-    const albums = data.topalbums
+const createAlbumList = (artist) => {
+  getArtistAlbums(artist).then((data) => {
+    let albumData = data;
+    const albums = albumData.topalbums;
     const albumListFrag = document.createDocumentFragment();
     const albumUl = document.createElement('ul')
         albumUl.classList.add('albumList')
@@ -132,41 +137,37 @@ const createAlbumList = (data) => {
     albumUl.addEventListener('click', (e) => {
     const li = e.target.closest('.albumList > li');
         if (!li || !albumUl.contains(li)) return; //Ignore clicks outside intended elements
-        getAlbumInfo(artist, li.textContent.trim())
+        renderAlbum(artist, li.textContent.trim())
+        console.log(artist)
     })
     albumListFrag.append(albumUl)
     artistDiv.append(albumListFrag)
-}
-
-const getActivity = () => {
-  let jsonData;
-  getArtistInfo('Wormrot').then((data) => {
-    jsonData = data
-    console.log(jsonData)
-  })
+})
 }
 
 //Render artist information div content
-const renderArtist = (data) => {
-    artistDiv.innerHTML = '';
+const renderArtist = (artist) => {
+    artistDiv.textContent = '';
+    getArtistInfo(artist).then((data) => {
+      let artistData = data
+      const artistHead = document.createElement('h1');
+          artistHead.classList.add('artistName');
+          artistHead.textContent = artistData.artist.name
+      
 
-    const artistHead = document.createElement('h1');
-        artistHead.classList.add('artistName');
-        artistHead.textContent = data.topalbums.album[0].artist.name
-
-    const artistBio = Object.assign(document.createElement('textarea'), {
-        id: 'artistBio',
-        textContent: 'Artist description',
-        readOnly: 'true',
-    });
-        
-
-    const albumListHead = document.createElement('h2')
-        albumListHead.classList.add('albumListHeading')
-        albumListHead.textContent = 'Releases'
+      const artistBio = Object.assign(document.createElement('div'), {
+          id: 'artistBio',
+          textContent: artistData.artist.bio.content
+      });
+      
+      const albumListHead = document.createElement('h2')
+          albumListHead.classList.add('albumListHeading')
+          albumListHead.textContent = 'Releases'
+      
+      artistDiv.append(artistHead, artistBio, albumListHead)
+      createAlbumList(artist)
+    })
     
-    artistDiv.append(artistHead, artistBio, albumListHead)
-    createAlbumList(data)
 }
 
 //#endregion
@@ -188,8 +189,11 @@ const albumInfo = (title, value) => {
 }
 
 
-const createTracklist = (data) => {
-    const tracks = data?.album?.tracks?.track;
+const createTracklist = (artist, album) => {
+  getAlbumInfo(artist, album).then((data) => {
+  let albumData = data
+  
+    const tracks = albumData?.album?.tracks?.track;
     const tracklist = normaliseTracks(tracks)
 
     if (tracklist.length === 0) {
@@ -256,10 +260,13 @@ const createTracklist = (data) => {
 
     
     albumDiv.appendChild(tbl);
+  })
 }
 
-const renderAlbum = (data) => {
-  albumDiv.innerHTML = '';
+const renderAlbum = (artist, album) => {
+  albumDiv.textContent = '';
+  getAlbumInfo(artist, album).then((data) => {
+    albumData = data
   
   // Album information
     const albumInfoTbl = document.createElement('table');
@@ -267,7 +274,7 @@ const renderAlbum = (data) => {
   
     const albumCover = document.createElement('img');
         albumCover.classList.add('albumCover');
-        albumCover.src = data.album.image[3]['#text'];
+        albumCover.src = albumData.album.image[3]['#text'];
   
   
   
@@ -277,14 +284,14 @@ const renderAlbum = (data) => {
 
   //Populate info table with API data
   albumInfoTbl.append(
-    albumInfo('Artist', data.album.artist),
-    albumInfo('Album', data.album.name),
+    albumInfo('Artist', albumData.album.artist),
+    albumInfo('Album', albumData.album.name),
     albumInfo('Release', '1993')
   )
-  
 
   albumDiv.append(albumCover, albumInfoTbl, albumInfoHeading)
-  createTracklist(data)
+  createTracklist(artist, album)
+  })
 }
 
 //#endregion
@@ -297,17 +304,17 @@ artistList.addEventListener('click', (e) => {
         albumDiv.textContent = '';
         artistDiv.textContent = '';
         if (!li || !artistList.contains(li)) return; // Ignore clicks outside the li elements
-        getArtistAlbums(li.textContent.trim())
-        //getActivity()
+        renderArtist(li.textContent.trim())
+        //getArtistInfo(li.textContent.trim()).then(console.log).catch(console.error)
 })
 
 
 
 artistSearchForm.addEventListener('submit', (e) => {
+  albumDiv.textContent = '';
   e.preventDefault();
   const artistValue = artistInput.value.trim(); 
-  
-  getArtistAlbums(artistValue)
+  renderArtist(artistValue)
 })
 
 //#endregion

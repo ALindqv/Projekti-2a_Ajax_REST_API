@@ -4,3 +4,5 @@
 
 test_data/
 index_copy.html
+# Local Netlify folder
+.netlify
