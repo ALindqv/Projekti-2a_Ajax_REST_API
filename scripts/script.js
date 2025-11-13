@@ -25,50 +25,6 @@ const artistList = document.querySelector('.artistList')
 
 //#region 2. Api requests
 
-/*
-const getArtistAlbums = (artist) => {
-    API_REQUEST = `https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${encodeURIComponent(artist)}&api_key=${API_KEY}&format=json`
-    return fetch(API_REQUEST)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Virhe')
-          } 
-          return response.json();
-        })
-        .then(data => {
-            return data;
-        })
-        .catch(error => {
-            console.error('Virhe', error)
-        })
-}
-
-const getArtistInfo = (artist) => {
-    const API_REQUEST = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artist)}&api_key=${API_KEY}&format=json`
-    return fetch(API_REQUEST)
-        .then((response) => {
-          return response.json().then((data) => {
-          return data;
-        })})
-} 
-
-const getAlbumInfo = (artist, album) => {
-    const API_REQUEST = `http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${API_KEY}&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&format=json`
-    fetch(API_REQUEST)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Virhe')
-          } 
-          return response.json();
-        })
-        .then(data => {
-          renderAlbum(data);
-        })
-        .catch(error => {
-          console.error('Virhe', error)
-        })
-}*/
-
 const getArtistInfo = async artist => {
   const res = await fetch(`/api?action=artistInfo&artist=${encodeURIComponent(artist)}`);
   if (!res.ok) throw new Error(`Artist info request error: ${res.status}`);
@@ -105,6 +61,8 @@ const normaliseTracks = (tracks) => {
 
 //API data for track duration is in seconds, format to look better 
 const durationFormat = (duration) => {
+    if (duration === null) return 'N/A'; //Consistent display for null values
+
     const initVal = Math.max(0, Number(duration) || 0);
     const hours = Math.floor(initVal / 3600);
     const mins = Math.floor((initVal % 3600) / 60);
@@ -114,6 +72,31 @@ const durationFormat = (duration) => {
     return hours > 0  
     ? `${hours}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}` 
     : `${mins}:${String(secs).padStart(2, '0')}`
+}
+
+//LastFM data does not offer release year, get it from tags
+const yearFromTags = (tags) => {
+    //Normalising tags into an array for cleaner handling
+    const tagArr = Array.isArray(tags) ? tags : [tags].filter(Boolean);
+
+    const currentYear = new Date().getFullYear();
+
+        const parseTags = (value) => {
+            const text = String(value ?? '').trim();
+            if (!/^\d{4}$/.test(text)) return null; //Using regex to only accept 4 digit values
+            const releaseYear = Number(text);
+
+            //Limiting the range of accepted years for better results
+            if (releaseYear < 1900 || releaseYear > currentYear +1) return null;
+            console.log(releaseYear)
+            return releaseYear
+        };
+    
+    //Loop through the tags data to find the first valid value
+    for (const tag of tagArr) {
+        const year = parseTags(tag?.name);
+        if (year !== null) return year; //Exit loop early if valid year tag found
+    }; return 'N/A';
 }
 
 //#endregion
@@ -138,7 +121,6 @@ const createAlbumList = (artist) => {
     const li = e.target.closest('.albumList > li');
         if (!li || !albumUl.contains(li)) return; //Ignore clicks outside intended elements
         renderAlbum(artist, li.textContent.trim())
-        console.log(artist)
     })
     albumListFrag.append(albumUl)
     artistDiv.append(albumListFrag)
@@ -174,7 +156,7 @@ const renderArtist = (artist) => {
 
 //#region 5. Content for album div
 
-// Create content for album div
+// Create the basic album info table
 const albumInfo = (title, value) => {
     const row = document.createElement('tr');
     const heading = document.createElement('th'); 
@@ -182,7 +164,7 @@ const albumInfo = (title, value) => {
         heading.textContent = title;
 
     const info = document.createElement('td');
-        info.textContent = value ?? 'N/A';
+        info.textContent = value;
 
     row.append(heading, info);
     return row
@@ -266,7 +248,7 @@ const createTracklist = (artist, album) => {
 const renderAlbum = (artist, album) => {
   albumDiv.textContent = '';
   getAlbumInfo(artist, album).then((data) => {
-    albumData = data
+    const albumData = data
   
   // Album information
     const albumInfoTbl = document.createElement('table');
@@ -286,7 +268,7 @@ const renderAlbum = (artist, album) => {
   albumInfoTbl.append(
     albumInfo('Artist', albumData.album.artist),
     albumInfo('Album', albumData.album.name),
-    albumInfo('Release', '1993')
+    albumInfo('Release', yearFromTags(albumData.album?.tags?.tag))
   )
 
   albumDiv.append(albumCover, albumInfoTbl, albumInfoHeading)
@@ -305,10 +287,7 @@ artistList.addEventListener('click', (e) => {
         artistDiv.textContent = '';
         if (!li || !artistList.contains(li)) return; // Ignore clicks outside the li elements
         renderArtist(li.textContent.trim())
-        //getArtistInfo(li.textContent.trim()).then(console.log).catch(console.error)
 })
-
-
 
 artistSearchForm.addEventListener('submit', (e) => {
   albumDiv.textContent = '';
