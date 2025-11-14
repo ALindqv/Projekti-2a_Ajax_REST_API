@@ -80,7 +80,7 @@ const durationFormat = (duration) => {
 
 //LastFM data does not offer release year, get it from tags
 const yearFromTags = (tags) => {
-    //Normalising tags into an array for cleaner handling
+    //Normalising tags into an array for cleaner handling. Remove falsy values -> empty array
     const tagArr = Array.isArray(tags) ? tags : [tags].filter(Boolean);
 
     const currentYear = new Date().getFullYear();

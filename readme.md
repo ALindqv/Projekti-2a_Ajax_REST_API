@@ -3,8 +3,9 @@ Projektin nimi ja kaikki mukana olevat tekijät.
 Projektin tekijä on Arttu Lindqvist.
 
 ## Verkkolinkit:
-Pääset julkaistuun sovellukseen käsiksi osoitteessa [google.com](https://google.com)
-Linkki projektin videoesittelyyn [google.com](https://google.com)
+Pääset julkaistuun sovellukseen käsiksi osoitteessa 
+
+Linkki projektin videoesittelyyn osoitteessa [video.laurea.fi](https://video.laurea.fi/media/Projekti+2+Esittelyvideo/0_o766q78r)
 
 ## Työn jakautuminen 
 Miten työmäärä jaettiin? Kuka teki mitä? Miten yhteistyö sujui?
