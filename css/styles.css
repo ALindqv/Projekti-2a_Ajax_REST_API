@@ -173,6 +173,10 @@ body {
     border-radius: var(--liBorderRadius);
 }
 
+.albumList li:hover {
+    background-color: aqua;
+}
+
 .trackList {
     width: fit-content;
 }
@@ -182,6 +186,7 @@ body {
 }
 
 .titleCol {
+    padding-left: 2px;
     width: auto;
 }
 
@@ -204,8 +209,31 @@ body {
 .tracklistTbl thead th {
     position: sticky;
     background-color: #fff;
+    color: black;
     top: 0;
     z-index: 2;
+}
+
+
+.tracklistTbl tr {
+    color: #fff;
+}
+
+.tracklistTbl tr:nth-child(even) {
+    background-color: #ee1111;
+}
+
+.tracklistTbl tr:nth-child(odd) {
+    background-color: #d05b5b;
+}
+
+.tracklistTbl td:hover {
+    background-color: rgb(225, 225, 225);
+    color: black;
+}
+
+.tracklistTbl tfoot tr {
+    color: black;
 }
 
 .tracklistTbl tfoot th, .tracklistTbl tfoot td {
@@ -213,23 +241,4 @@ body {
     background-color: #fff;
     bottom: 0;
     z-index: 2;
-}
-
-.tracklistTbl td:hover {
-    background-color: red;
-}
-
-.tracklistTbl tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-@media only screen and (max-width: 600px) {
-    .app {
-        display: flex;
-        flex-direction: column;
-    }
-    .information {
-        display: flex;
-        flex-direction: column;
-    }
 }

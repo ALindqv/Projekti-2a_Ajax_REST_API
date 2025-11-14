@@ -6,3 +6,6 @@ test_data/
 index_copy.html
 # Local Netlify folder
 .netlify
+deno.lock
+package.json
+package-lock.json

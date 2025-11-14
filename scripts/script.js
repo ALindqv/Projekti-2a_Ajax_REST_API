@@ -10,6 +10,8 @@
 
 
 //#region 1. Global variables
+
+//DOM elements
 const artistDiv = document.querySelector('.artistInformation');
 const albumDiv = document.querySelector('.albumInformation');
 const trackLstDiv = document.querySelector('.trackList');
@@ -20,6 +22,8 @@ const artistSearchForm = document.querySelector('.artistSearch');
 const searchBtn = document.querySelector('.searchButton');
 
 const artistList = document.querySelector('.artistList')
+
+const nullReplace = 'N/A'
 
 //#endregion
 
@@ -61,7 +65,7 @@ const normaliseTracks = (tracks) => {
 
 //API data for track duration is in seconds, format to look better 
 const durationFormat = (duration) => {
-    if (duration === null) return 'N/A'; //Consistent display for null values
+    if (duration === null) return nullReplace; //Consistent display for null values
 
     const initVal = Math.max(0, Number(duration) || 0);
     const hours = Math.floor(initVal / 3600);
@@ -88,7 +92,6 @@ const yearFromTags = (tags) => {
 
             //Limiting the range of accepted years for better results
             if (releaseYear < 1900 || releaseYear > currentYear +1) return null;
-            console.log(releaseYear)
             return releaseYear
         };
     
@@ -96,7 +99,7 @@ const yearFromTags = (tags) => {
     for (const tag of tagArr) {
         const year = parseTags(tag?.name);
         if (year !== null) return year; //Exit loop early if valid year tag found
-    }; return 'N/A';
+    }; return nullReplace;
 }
 
 //#endregion
@@ -117,6 +120,8 @@ const createAlbumList = (artist) => {
         })
         albumUl.appendChild(albumLi)
     })
+
+    //Event listener for all li elements using event delegation
     albumUl.addEventListener('click', (e) => {
     const li = e.target.closest('.albumList > li');
         if (!li || !albumUl.contains(li)) return; //Ignore clicks outside intended elements
