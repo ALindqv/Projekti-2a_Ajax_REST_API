@@ -1,5 +1,6 @@
 # Projektin nimi ja tekijät
 Projektin nimi ja kaikki mukana olevat tekijät. 
+Projektin tekijä on Arttu Lindqvist.
 
 ## Verkkolinkit:
 Pääset julkaistuun sovellukseen käsiksi osoitteessa [google.com](https://google.com)
@@ -8,17 +9,23 @@ Linkki projektin videoesittelyyn [google.com](https://google.com)
 ## Työn jakautuminen 
 Miten työmäärä jaettiin? Kuka teki mitä? Miten yhteistyö sujui?
 
+
 ## Oma arvio työstä ja oman osaamisen kehittymisestä
-Mielestäni onnistuin...
-Parantamista olisi...
-Sovelluksesta jäi puuttumaan...
-Koen, että olen oppinut...
-Epäselväksi jäi...
-Antaisin itselleni pisteitä seuraavasti: xx/yy p
+Mielestäni onnistuin hyödyntämään tarjottua API dataa monipuolisesti ja muuntamaan sitä paremman näköiseksi.
+
+Parantamista olisi
+
+Sovelluksesta jäi puuttumaan hakukentän sisällön tarkastamisen toimintoja, esimerkiksi varmistaminen, että haettu artisti on olemassa LastFM-palvelussa.
+
+Koen, että olen oppinut paljon API-datan hakemisesta ja AJAX-kutsujen käyttämisestä. Opin myös tapoja käsitellä saatua dataa tarvittaessa.
+
+Epäselväksi jäi muut tavat säilyttää API-avainta turvallisesti, mutta tulen tutustumaan niihin tulevaisuuden projekteissa. Lisäksi en saanut paljon kokemusta XML-kutsuista, koska käytin datan hakemiseen vain fetchiä ja JSON-dataa.
+
+Antaisin itselleni pisteitä seuraavasti: 9/10 p
 
 ## Palaute opettajalle kurssista sekä itse opetuksesta tähän saakka
-Kurssi sekä lähiopetus ovat tuntuneet... 
-Oppimistani tukisi jos...
+Kurssi sekä lähiopetus ovat tuntuneet hyödylliseltä 
+Oppimistani tukisi lisää jos kävisin useammin lähiopetuksessa
 
 
 ## Sisällysluettelo:
@@ -33,27 +40,41 @@ Oppimistani tukisi jos...
 - [Lisenssi](#lisenssi)
 
 ## Tietoja sovelluksesta
-[Projektin nimi] on sovellus, joka ...
+[Projektin nimi] on sovellus, joka tarjoaa käyttäjälle tietoa erilaisista musiikkartisteista ja heidän julkaisuistaan. Sovellus tarjoaa valmiiksi muutaman artistin mutta hän voi myös vapaasti hakea artistia nimellä hakukentän avulla.
+
+Sovellus hakee LastFM:stä dataa ja esittää ne sivulla. Käyttäjä saa seuraavaa tietoa:
+
+Artisti:
+- Kuvaus artistista
+- Lista julkaisuista
+
+Albumi:
+- Albumin esittäjä
+- Albumin nimi
+- Albumin julkaisuvuosi
+- Albumin kappalelista
+
+Jos näitä tietoja ei ole saatavilla, sovellus kertoo käyttäjälle.
 
 ## Tunnetut virheet/bugit
-Kerro jos tiedät sovelluksessa olevan jotain, mikä ei toimi tai toimii heikosti
+Sovellus ei vielä kunnolla tarkista käyttäjän syöttämää tekstiä.
 
 ## Kuvakaappaukset
 Lisää tähän vähintään yksi kuvakaappaus toimivasta sovelluksesta  
 `![Kirjoittaminen](https://unsplash.com/photos/VBPzRgd7gfc)`
 
-Kuva: [Kelly Sikkema](https://unsplash.com/@kellysikkema)
-
 ## Teknologiat
 Kuvaa, mitä teknologioita käytettiin ja mikä oli niiden rooli projektissasi.  
-Käytin seuraavia teknologioita: `html`, `css`, ...
+Käytin seuraavia teknologioita: `html`, `css`, `Javascript`
 
 ## Asennus
-Kirjoita lyhyet ohjeet sovelluksen käynnistämiseen ja käyttöön. Esimerkiksi:  
-- lataa kaikki tiedostot ja avaa index.html selaimessasi  
-- lataa tai kloonaa repositorio  
-- suorita `npm install`  
-- ...
+Jos haluat käyttää sovellusta paikallisesti, tarvitset oman API-avaimen [LastFM-sivustolta](https://www.last.fm/api)
+- Luo root-hakemistoon .env-tiedosto ja luo muuttuja `LASTFM_API_KEY = 'API-Avain tänne'`
+
+Sen jälkeen:
+- Lataa kaikki tiedostot/lataa tai kloonaa repositorio  
+- Asenna netlify: Suorita `npm i -g netlify-cli`  
+- Suorite terminaalissa `netlify dev`
 
 ## Kiitokset
 Lista lähteistä ja esimerkeistä, joita käytit projektin aikana. Mainitse myös, jos käytit ChatGPT:tä tai muita tekoälytyökaluja koodauksen aikana ja kerro, miten ne auttoivat sinua.  
@@ -61,10 +82,12 @@ Lista lähteistä ja esimerkeistä, joita käytit projektin aikana. Mainitse my�
 Käytin projektia tehdessä CoPilot-tekoälysovellusta. Käyttötarkoituksia olivat:
 - Javascript-toimintojen ja css-attribuuttien selityksiä selvennystä varten.
 - Apua ja ehdotuksia kommentointiin ja koodin luettavuuden parantamiseen.
-- Ehdotuksia koodin rakenteen parantamiseen.
+- Ehdotuksia, miten erilaisia toimintoja voisi toteuttaa.
+- Niissä tapauksissa, joissa käytin tekoälyn tarjoamia toimintoja tai koodia, kysyin aina tarvittaessa selityksen, miten koko koodi toimii.
 
 Muita lähteitä:  
-- [Beginners guide to BEM](link-goes-here.com)  
+- [MDN Web Docs](https://developer.mozilla.org/en-US/)
+- [W3Schools](https://www.w3schools.com/)
 
 ## Lisenssi
 Valitse projektille lisenssi seuraamalla tätä [opasta](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository).
