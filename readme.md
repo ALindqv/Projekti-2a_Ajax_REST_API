@@ -1,5 +1,4 @@
 # Projektin nimi ja tekijät
-Projektin nimi ja kaikki mukana olevat tekijät. 
 Projektin nimi on MusicLore ja tekijä on Arttu Lindqvist.
 
 ## Verkkolinkit:
@@ -8,15 +7,15 @@ Pääset julkaistuun sovellukseen käsiksi osoitteessa [netlify.app](https://mus
 Linkki projektin videoesittelyyn osoitteessa [video.laurea.fi](https://video.laurea.fi/media/Projekti+2+Esittelyvideo/0_o766q78r)
 
 ## Työn jakautuminen 
-Miten työmäärä jaettiin? Kuka teki mitä? Miten yhteistyö sujui?
+Työmäärä jakautui noin kahden viikon päivittäiseen työstämiseen. Kokonaisaika projektin valmistumiselle oli noin 75 tuntia.
 
 
 ## Oma arvio työstä ja oman osaamisen kehittymisestä
 Mielestäni onnistuin hyödyntämään tarjottua API dataa monipuolisesti ja muuntamaan sitä paremman näköiseksi.
 
-Parantamista olisi
+Parantamista olisi vielä css-osaamisessa ja eri ominaisuuksien hyödyntämisessä.
 
-Sovelluksesta jäi puuttumaan hakukentän sisällön tarkastamisen toimintoja, esimerkiksi varmistaminen, että haettu artisti on olemassa LastFM-palvelussa.
+Sovelluksesta jäi puuttumaan hakukentän sisällön tarkastamisen toimintoja, esimerkiksi varmistaminen, että haettu artisti on olemassa LastFM-palvelussa. Lisättävänä olisi myös paremmat virheilmoitukset jos AJAX pyyntö ei esimerkiksi mene läpi. Myös css-tyylit jäivät jonkin verran kesken, erityisesti sovelluksen responsiivisuus.
 
 Koen, että olen oppinut paljon API-datan hakemisesta ja AJAX-kutsujen käyttämisestä. Opin myös tapoja käsitellä saatua dataa tarvittaessa.
 
@@ -25,8 +24,9 @@ Epäselväksi jäi muut tavat säilyttää API-avainta turvallisesti, mutta tule
 Antaisin itselleni pisteitä seuraavasti: 9/10 p
 
 ## Palaute opettajalle kurssista sekä itse opetuksesta tähän saakka
-Kurssi sekä lähiopetus ovat tuntuneet hyödylliseltä 
-Oppimistani tukisi lisää jos kävisin useammin lähiopetuksessa
+Kurssi sekä lähiopetus ovat tuntuneet hyödylliseltä ja sain tarvittaessa tarpeeksi tukea.
+
+Oppimistani tukisi mahdollisesti lisää jos kävisin useammin lähiopetuksessa.
 
 
 ## Sisällysluettelo:
