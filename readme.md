@@ -61,8 +61,6 @@ Jos näitä tietoja ei ole saatavilla, sovellus kertoo käyttäjälle.
 Sovellus ei vielä kunnolla validoi käyttäjän syöttämää tekstiä.
 
 ## Kuvakaappaukset
-Lisää tähän vähintään yksi kuvakaappaus toimivasta sovelluksesta  
-`![Kirjoittaminen](https://unsplash.com/photos/VBPzRgd7gfc)`
 ![Album view](/images/Album_View.png)
 ![Album view 2](/images/Album_View2.png)
 
